@@ -1,13 +1,37 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import "./NavBar.sass";
 import logo from "../../logo.png";
+import GmailLogin from "../Login/GmailLogin";
 
 class NavBar extends React.Component {
+  renderNavEnd = () => {
+    if (this.props.isSignedIn) {
+      return (
+        <div className="navbar-end">
+          <div className="navbar-item">
+            <GmailLogin></GmailLogin>
+          </div>
+        </div>
+      );
+    }
+  };
+  renderNavStart = () => {
+    if (this.props.isSignedIn) {
+      return (
+        <div className="navbar-start">
+          <Link to="/home" className="navbar-item">
+            Home
+          </Link>
+        </div>
+      );
+    }
+  };
   render() {
     return (
       <nav
-        className="navbar is-light"
+        className="navBarCmpnt navbar is-fixed-top is-light"
         role="navigation"
         aria-label="main navigation"
       >
@@ -28,21 +52,17 @@ class NavBar extends React.Component {
           </div>
         </div>
         <div id="navBarItems" className="navbar-menu">
-          <div className="navbar-start">
-            <Link to="/home" className="navbar-item">
-              Home
-            </Link>
-          </div>
-
-          <div className="navbar-end">
-            <Link to="/login" className="navbar-item">
-              Login
-            </Link>
-          </div>
+          {this.renderNavStart()}
+          {this.renderNavEnd()}
         </div>
       </nav>
     );
   }
 }
-
-export default NavBar;
+const mapStateToProps = (state) => {
+  return {
+    isSignedIn: state.auth.isSignedIn,
+    userId: state.auth.userId,
+  };
+};
+export default connect(mapStateToProps)(NavBar);

@@ -1,15 +1,16 @@
 import React from "react";
+import Search from "./Search";
 import API from "../../api";
+import "./Home.sass";
 
 class Home extends React.Component {
   state = {
-    searchValue: "",
     searchData: [],
   };
   searchResultsMapper = (data) => {
-    console.log(data);
     this.setState({
       searchData: data
+        .slice(0, 8)
         .filter(({ abstract, headline }) => {
           return abstract !== "" && headline !== "";
         })
@@ -63,37 +64,13 @@ class Home extends React.Component {
     this.searchResultsMapper(data);
   };
 
-  handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      this.handleBtnClick();
-    }
-  };
   componentDidMount() {
     this.handleOnLoad();
   }
   render() {
     return (
       <section className="section is-light homeCmpnt">
-        <div
-          className="field is-grouped"
-          style={{ width: "50%", margin: "20px auto" }}
-        >
-          <p className="control is-expanded">
-            <input
-              className="input"
-              type="text"
-              value={this.state.searchValue}
-              onChange={(e) => this.setState({ searchValue: e.target.value })}
-              onKeyPress={this.handleKeyPress}
-              placeholder="Search an article"
-            />
-          </p>
-          <p className="control">
-            <a className="button is-info" onClick={this.handleBtnClick}>
-              Search
-            </a>
-          </p>
-        </div>
+        <Search onClick={(term) => this.handleBtnClick(term)}></Search>
         <div
           className="tile is-ancestor"
           style={{ flexWrap: "wrap", justifyContent: "center" }}

@@ -1,9 +1,16 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from "react-router-dom";
 
+import { connect } from "react-redux";
 import NavBar from "./NavBar/NavBar";
 import Home from "./Home/Home";
 import Login from "./Login/Login";
+
 import "./App.sass";
 
 class App extends React.Component {
@@ -15,13 +22,15 @@ class App extends React.Component {
             <NavBar></NavBar>
             <Switch>
               <Route path="/" exact>
-                <Home />
+                {!this.props.isSignedIn ? <Redirect to="/login" /> : <Home />}
               </Route>
-              <Route path="/home" exact>
-                <Home />
+
+              <Route path="/home" exact component={Home}>
+                {!this.props.isSignedIn ? <Redirect to="/login" /> : <Home />}
               </Route>
+
               <Route path="/login" exact>
-                <Login />
+                {this.props.isSignedIn ? <Redirect to="/home" /> : <Login />}
               </Route>
             </Switch>
           </div>
@@ -31,4 +40,10 @@ class App extends React.Component {
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    isSignedIn: state.auth.isSignedIn,
+    userId: state.auth.userId,
+  };
+};
+export default connect(mapStateToProps)(App);
