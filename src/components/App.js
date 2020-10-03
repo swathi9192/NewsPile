@@ -32,6 +32,9 @@ class App extends React.Component {
               <Route path="/login" exact>
                 {this.props.isSignedIn ? <Redirect to="/home" /> : <Login />}
               </Route>
+              <Route path="*">
+                <Redirect to="/login" />
+              </Route>
             </Switch>
           </div>
         </div>
