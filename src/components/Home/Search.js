@@ -6,7 +6,7 @@ class Search extends React.Component {
   };
   handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      this.props.handleBtnClick(this.state.searchValue);
+      this.props.onClick(this.state.searchValue);
     }
   };
   render() {
@@ -29,7 +29,7 @@ class Search extends React.Component {
           <a
             className="button is-info searchBtn"
             onClick={(term) =>
-              this.props.handleBtnClick(this.state.searchValue)
+              this.props.onClick(this.state.searchValue)
             }
           >
             Search
